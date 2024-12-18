@@ -1,3 +1,4 @@
+
 export class FinancePresenter {
     constructor(model, view) {
         this.model = model;
