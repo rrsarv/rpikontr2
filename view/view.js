@@ -23,7 +23,7 @@ export class FinanceView {
     }
 
     displayTransactions(transactions) {
-        this.transactionsListElement.innerHTML = ''; // Очистить текущий список транзакций
+        this.transactionsListElement.innerHTML = ''; 
         transactions.forEach((transaction, index) => {
             const article = document.createElement('article');
             article.classList.add('transaction');
