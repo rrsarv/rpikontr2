@@ -1,4 +1,3 @@
-// model/model.js
 export class FinanceModel {
     constructor() {
         this.transactions = [];
