@@ -1,31 +1,43 @@
-export class FinanceModel {
-    constructor() {
-        this.transactions = [];
+export class FinancePresenter {
+    constructor(model, view) {
+        this.model = model;
+        this.view = view;
+
+        this.view.bindAddTransaction(this.handleAddTransaction.bind(this));
+        this.view.bindRemoveTransaction(this.handleRemoveTransaction.bind(this));
+        this.view.bindFilterChange(this.handleFilterChange.bind(this));
+        this.updateView();
     }
 
-    addTransaction(transaction) {
-        this.transactions.push(transaction);
+    handleAddTransaction(transactionData) {
+        if (transactionData.amount <= 0 || !transactionData.type || !transactionData.category) {
+            alert("Заполните все поля корректно!");
+            return;
+        }
+        const transaction = {
+            type: transactionData.type,
+            category: transactionData.category,
+            amount: transactionData.amount
+        };
+        this.model.addTransaction(transaction);
+        this.updateView();
     }
 
-    removeTransaction(index) {
-        this.transactions.splice(index, 1);
+    handleRemoveTransaction(index) {
+        this.model.removeTransaction(index);
+        this.updateView();
     }
 
-    getTotalBalance() {
-        return this.transactions.reduce((total, transaction) => {
-            return transaction.type === 'income' ? total + transaction.amount : total - transaction.amount;
-        }, 0);
+    handleFilterChange() {
+        const typeFilter = this.view.typeFilter.value;
+        const categoryFilter = this.view.categoryFilter.value;
+        const filteredTransactions = this.model.getFilteredTransactions(typeFilter, categoryFilter);
+        this.view.displayTransactions(filteredTransactions);
     }
 
-    getTransactions() {
-        return this.transactions;
-    }
-
-    getFilteredTransactions(typeFilter, categoryFilter) {
-        return this.transactions.filter(transaction => {
-            const typeMatch = typeFilter ? transaction.type === typeFilter : true;
-            const categoryMatch = categoryFilter ? transaction.category === categoryFilter : true;
-            return typeMatch && categoryMatch;
-        });
+    updateView() {
+        const totalBalance = this.model.getTotalBalance();
+        this.view.displayTotalBalance(totalBalance);
+        this.handleFilterChange(); 
     }
 }
