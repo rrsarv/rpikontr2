@@ -1,4 +1,3 @@
-// main.js
 import { FinanceModel } from './model/model.js';
 import { FinanceView } from './view/view.js';
 import { FinancePresenter } from './presenter/presenter.js';
